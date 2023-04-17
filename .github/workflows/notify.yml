@@ -38,8 +38,8 @@ jobs:
           to: ananta@rxefy.com
           subject: Pre Released - ${{ steps.get_current_release.outputs.tag_name }}
           body: |
-            New  Version: ${{ steps.get_release.outputs.tag_name }} released.
-            - Release Tag URL: ${{ steps.get_release.outputs.html_url }}
+            New  Version: ${{ steps.get_current_release.outputs.tag_name }} released.
+            - Release Tag URL: ${{ steps.get_current_release.outputs.html_url }}
           #html_body: file://release_notes.md
           ignore_cert: true
           convert_markdown: true
