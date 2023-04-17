@@ -56,6 +56,6 @@ jobs:
           tag_name: pre-release-v-${{ steps.extract_version.outputs.version }}
           release_name: pre-release-v-${{ steps.extract_version.outputs.version }}
           artifacts: "pre-release-v-${{ steps.extract_version.outputs.version }}.zip"
-          body_path: ./release_notes.md
+         # body_path: ./release_notes.md
           draft: false
           prerelease: true
