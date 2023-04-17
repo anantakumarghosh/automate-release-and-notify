@@ -24,7 +24,7 @@ jobs:
         with:
           debug: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Send mail
         uses: dawidd6/action-send-mail@v3
