@@ -24,7 +24,7 @@ jobs:
         with:
           tag-prefix:  ''
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.PATW }}
           PACKAGEJSON_DIR:  './'
 
 
