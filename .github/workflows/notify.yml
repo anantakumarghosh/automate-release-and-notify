@@ -1,0 +1,47 @@
+name: Pre Release Deploy & Notify
+
+on:
+  release:
+    types: [prereleased]    #old [published]
+    branches:
+      - main
+
+  workflow_dispatch:
+    branches:
+      - main
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    name: Notify through email
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get Current Release
+        id: get_current_release
+        uses: joutvhu/get-release@v1
+        with:
+          debug: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          secure: true
+          from: Ananta
+          to: ananta@rxefy.com
+          subject: Pre Released - ${{ steps.get_current_release.outputs.tag_name }}
+          body: |
+            New  Version: ${{ steps.get_current_release.outputs.tag_name }} released.
+            - Release Tag URL: ${{ steps.get_current_release.outputs.html_url }}
+          #html_body: file://release_notes.md
+          ignore_cert: true
+          convert_markdown: true
+          # attachments: attachments.zip,git.diff
+          priority: normal
