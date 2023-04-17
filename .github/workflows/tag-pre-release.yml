@@ -1,0 +1,59 @@
+
+name: Tag Pre Release - CI
+
+
+on:
+  schedule:
+    - cron: "30 6 * * 1"   #every wednesday 1AM
+  
+  
+  workflow_dispatch:
+    branches:
+      - main
+
+jobs:
+  version_update:
+    runs-on: ubuntu-latest
+    name: Verson Update
+    steps:
+      - name: Checkout...
+        uses: actions/checkout@v3
+
+      - name: Version update
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix:  ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR:  './'
+
+
+  release:
+    needs: [version_update]
+    runs-on: ubuntu-latest
+    name: Release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
+      - name: Print version
+        run: echo ${{ steps.extract_version.outputs.version }}
+      - name: Creating release artifacts
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r pre-release-v-${{ steps.extract_version.outputs.version }}.zip . -i build
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: pre-release-v-${{ steps.extract_version.outputs.version }}
+          release_name: pre-release-v-${{ steps.extract_version.outputs.version }}
+          artifacts: "pre-release-v-${{ steps.extract_version.outputs.version }}.zip"
+          body_path: ./release_notes.md
+          draft: false
+          prerelease: true
