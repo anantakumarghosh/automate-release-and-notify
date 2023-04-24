@@ -3,8 +3,8 @@ name: Tag Pre Release - CI
 
 
 on:
-  schedule:
-    - cron: "30 6 * * 1"   #every wednesday 1AM
+# schedule:
+#   - cron: "30 6 * * 1"   #every wednesday 1AM
   
   
   workflow_dispatch:
